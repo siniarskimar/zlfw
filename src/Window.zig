@@ -181,7 +181,7 @@ pub fn shouldClose(self: Window) bool {
 /// synchronized.
 pub fn close(self: Window, value: bool) void {
     requireInit();
-    self.handle.shouldClose = value;
+    self.handle.shouldClose = @intFromBool(value);
 }
 
 /// This function gets the window title, encoded as UTF-8, of the specified window.
