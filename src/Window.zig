@@ -237,7 +237,7 @@ pub fn setTitle(self: Window, title: [:0]const u8) !void {
 const IFPError = error{ InvalidValue, FeatureUnavailable, PlatformError };
 pub fn setIcon(self: Window, images: []const c.GLFWimage) IFPError!void {
     requireInit();
-    c.glfwSetWindowIcon(@ptrCast(self.handle), images.len, images);
+    c.glfwSetWindowIcon(@ptrCast(self.handle), @intCast(images.len), images.ptr);
     try internal.subErrorCheck(IFPError);
 }
 
