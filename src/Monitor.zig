@@ -15,7 +15,7 @@ handle: *_c._GLFWmonitor = undefined,
 ///
 /// Generates a glfw.Monitor given a C pointer to a monitor
 pub fn init(glfw_handle: *c.GLFWmonitor) Monitor {
-    return .{ .handle = glfw_handle };
+    return .{ .handle = @alignCast(@ptrCast(glfw_handle)) };
 }
 
 /// Returns the currently connected monitors.

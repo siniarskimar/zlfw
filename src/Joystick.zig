@@ -285,7 +285,7 @@ pub fn getGUID(self: Joystick) ?[]const u8 {
 /// @thread_safety This function may be called from any thread. Access is not synchronized.
 pub fn setUserPointer(self: Joystick, ptr: ?*anyopaque) void {
     requireInit();
-    if (self.handle.allocated == 0) return null;
+    if (self.handle.allocated == 0) return;
     self.handle.userPointer = ptr;
 }
 
@@ -356,7 +356,7 @@ pub inline fn setCallback(comptime callback: ?fn (joystick: Joystick, event: Eve
 ///
 ///
 /// @thread_safety This function must only be called from the main thread.
-pub fn updateGamepadMappings(string: []const u8) GamepadError!void {
+pub fn updateGamepadMappings(string: [:0]const u8) GamepadError!void {
     requireInit();
     _ = c.glfwUpdateGamepadMappings(string);
     try internal.subErrorCheck(GamepadError);
