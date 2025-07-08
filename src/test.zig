@@ -7,7 +7,15 @@ test "glfw init hits" {
     var hints: glfw.InitHints = .{};
     hints.joystick_hat_buttons = false;
     hints.cocoa.menubar = true;
+
+    std.testing.refAllDecls(glfw.InitHints);
 }
+
+test "force syntax evaluation" {
+    std.testing.refAllDecls(glfw);
+    std.testing.refAllDecls(glfw.GammaRamp);
+}
+
 test "glfw version" {
     var major: c_int = 0;
     var minor: c_int = 0;
@@ -80,6 +88,8 @@ test "glfw monitor" {
     if (res) |ramp| {
         try primary.setGammaRamp(ramp);
     }
+
+    std.testing.refAllDecls(glfw.Monitor);
 }
 test "glfw window" {
     try glfw.init(.{});
@@ -224,6 +234,7 @@ test "glfw window" {
             _ = glfw.getProcAddress("glSpecializeShaderARB");
         }
     }
+    std.testing.refAllDecls(glfw.Window);
 }
 
 test "glfw input" {
@@ -262,6 +273,9 @@ test "glfw input" {
     try expect(t < 0.01);
     _ = glfw.getTimerValue();
     _ = glfw.getTimerFrequency();
+
+    std.testing.refAllDecls(glfw.Input);
+    std.testing.refAllDecls(glfw.Joystick);
 }
 
 test "glfw vulkan" {
