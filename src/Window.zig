@@ -1595,7 +1595,7 @@ pub inline fn setDropCallback(self: Window, comptime callback: ?fn (window: Wind
 
 pub fn swapBuffers(self: Window) !void {
     requireInit();
-    if (self.handle.context.client == @intFromEnum(glfw.Hint.Context.API.Client.Value.NoAPI))
+    if (self.handle.context.client == @intFromEnum(Hints.Context.ClientAPI.none))
         return Error.NoWindowContext;
 
     self.handle.context.swapBuffers(self.handle);
