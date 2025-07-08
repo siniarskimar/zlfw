@@ -16,7 +16,7 @@ owned: ?[]u16,
 /// Initializes a new (owned) gamma ramp with the given size and undefined values
 /// .deinit must be called.
 pub fn init(allocator: std.mem.Allocator, size: usize) !GammaRamp {
-    const buf = try allocator.init(u16, size * 3);
+    const buf = try allocator.alloc(u16, size * 3);
     return .{
         .red = buf[0..size],
         .green = buf[size .. 2 * size],
