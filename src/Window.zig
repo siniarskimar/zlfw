@@ -1598,7 +1598,7 @@ pub fn swapBuffers(self: Window) !void {
     if (self.handle.context.client == @intFromEnum(Hints.Context.ClientAPI.none))
         return Error.NoWindowContext;
 
-    self.handle.context.swapBuffers(self.handle);
+    self.handle.context.swapBuffers.?(self.handle);
 }
 //
 // Hints
