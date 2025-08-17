@@ -180,9 +180,11 @@ test "glfw window" {
     {
         // Events
         glfw.pollEvents();
-        glfw.waitEvents();
-        try glfw.waitEventsTimeout(0.01);
+
         glfw.postEmptyEvent();
+        glfw.waitEvents(); // should return
+
+        try glfw.waitEventsTimeout(0.01);
     }
     {
         // Input Modes
@@ -222,19 +224,23 @@ test "glfw window" {
             c.deinit();
         }
     }
-    {
-        // OpenGL
-        if (!glfw.build_options.vulkan) {
-            try glfw.gl.makeCurrentContext(window);
-            if (glfw.gl.getCurrentContext()) |current| {
-                try expect(current.handle == window.handle);
-            }
-            try glfw.gl.swapInterval(1);
-            _ = try glfw.gl.extensionSupported("GL_ARB_gl_spirv");
-            _ = glfw.gl.getProcAddress("glSpecializeShaderARB");
-        }
-    }
     std.testing.refAllDecls(glfw.Window);
+}
+
+test "glfw window opengl" {
+    try glfw.init(.{});
+    defer glfw.deinit();
+
+    var window = try glfw.Window.init(480, 600, "OpenGL window", null, null, .{ .focused = true });
+    defer window.deinit();
+
+    try glfw.gl.makeCurrentContext(window);
+    if (glfw.gl.getCurrentContext()) |current| {
+        try expect(current.handle == window.handle);
+    }
+    try glfw.gl.swapInterval(1);
+    _ = try glfw.gl.extensionSupported("GL_ARB_gl_spirv");
+    _ = glfw.gl.getProcAddress("glSpecializeShaderARB");
 }
 
 test "glfw input" {
