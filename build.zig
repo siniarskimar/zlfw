@@ -67,5 +67,17 @@ pub fn build(b: *std.Build) void {
     tests.root_module.addImport("zlfw", mod);
     tests.root_module.addOptions("build_options", options);
     tests.linkLibrary(glfw.artifact("glfw"));
-    b.step("test", "Run glfw tests").dependOn(&b.addRunArtifact(tests).step);
+
+    b.step("test", "Run glfw tests")
+        .dependOn(&b.addRunArtifact(tests).step);
+
+    {
+        const check = b.addStaticLibrary(.{
+            .name = "zlfw-check",
+            .root_module = mod,
+        });
+
+        b.step("check", "Check compilation status")
+            .dependOn(&check.step);
+    }
 }
