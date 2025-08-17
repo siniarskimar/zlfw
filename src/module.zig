@@ -491,4 +491,5 @@ pub fn getTimerFrequency() u64 {
 //
 // Context
 //
-pub usingnamespace if (build_options.vulkan) @import("vulkan.zig") else @import("opengl.zig");
+pub const vk = @import("vulkan.zig");
+pub const gl = @import("opengl.zig");

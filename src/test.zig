@@ -225,13 +225,13 @@ test "glfw window" {
     {
         // OpenGL
         if (!glfw.build_options.vulkan) {
-            try glfw.makeCurrentContext(window);
-            if (glfw.getCurrentContext()) |current| {
+            try glfw.gl.makeCurrentContext(window);
+            if (glfw.gl.getCurrentContext()) |current| {
                 try expect(current.handle == window.handle);
             }
-            try glfw.swapInterval(1);
-            _ = try glfw.extensionSupported("GL_ARB_gl_spirv");
-            _ = glfw.getProcAddress("glSpecializeShaderARB");
+            try glfw.gl.swapInterval(1);
+            _ = try glfw.gl.extensionSupported("GL_ARB_gl_spirv");
+            _ = glfw.gl.getProcAddress("glSpecializeShaderARB");
         }
     }
     std.testing.refAllDecls(glfw.Window);
@@ -280,19 +280,21 @@ test "glfw input" {
 
 test "glfw vulkan" {
     if (glfw.build_options.vulkan) {
-        try glfw.init(.{});
-        defer glfw.deinit();
-        if (glfw.vulkan_supported()) {
-            if (glfw.getRequiredInstanceExtensions()) |extensions| {
-                for (extensions) |extension| {
-                    _ = extension;
-                }
+        return error.SkipZigTest;
+    }
+
+    try glfw.init(.{});
+    defer glfw.deinit();
+    if (glfw.vk.vulkan_supported()) {
+        if (glfw.vk.getRequiredInstanceExtensions()) |extensions| {
+            for (extensions) |extension| {
+                _ = extension;
             }
-            // TODO: Make actual tests
-            // _ = glfw.Vulkan.getInstanceProcAddress(null, "vkGetInstanceProcAddr");
-            // _ = glfw.Vulkan.getPhysicalDevicePresentationSupport(null, null, 0);
-            // _ = glfw.Vulkan.createWindowSurface(null, null, null, null);
         }
+        // TODO: Make actual tests
+        // _ = glfw.Vulkan.getInstanceProcAddress(null, "vkGetInstanceProcAddr");
+        // _ = glfw.Vulkan.getPhysicalDevicePresentationSupport(null, null, 0);
+        // _ = glfw.Vulkan.createWindowSurface(null, null, null, null);
     }
 }
 
