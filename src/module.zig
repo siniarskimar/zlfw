@@ -19,12 +19,15 @@ pub const Joystick = @import("Joystick.zig");
 pub const GammaRamp = @import("GammaRamp.zig");
 pub const Image = @import("Image.zig");
 pub const initAllocator = @import("allocator.zig").initAllocator;
+
+pub threadlocal var last_error_description: ?[*:0]const u8 = null;
 /// This function should not be used directly
 ///
 /// Checks the glfw error buffer and returns the appropriate zig error
 pub fn errorCheck() Error!void {
-    var description: [*c]const u8 = undefined;
-    if (internal.err.toZigError(c.glfwGetError(&description))) |e| return e;
+    // var description: [*c]const u8 = undefined;
+    if (internal.err.toZigError(c.glfwGetError(&last_error_description))) |e| return e;
+    last_error_description = null;
 }
 /// Holds the compile time version data of glfw
 pub const version = struct {
