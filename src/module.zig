@@ -20,7 +20,7 @@ pub const GammaRamp = @import("GammaRamp.zig");
 pub const Image = @import("Image.zig");
 pub const initAllocator = @import("allocator.zig").initAllocator;
 
-pub threadlocal var last_error_description: ?[*:0]const u8 = null;
+pub threadlocal var last_error_description: [*c]const u8 = null;
 /// This function should not be used directly
 ///
 /// Checks the glfw error buffer and returns the appropriate zig error
