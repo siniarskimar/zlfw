@@ -19,6 +19,34 @@ pub fn build(b: *std.Build) void {
         .include_src = true,
     });
 
+    const c_glfw = b.addTranslateC(.{
+        .target = target,
+        .optimize = optimize,
+        .link_libc = true,
+        .root_source_file = b.path("src/c/glfw3.h"),
+    });
+    const c_glfw_mod = c_glfw.createModule();
+
+    c_glfw.include_dirs.append(.{
+        .path = glfw.path("include"),
+    }) catch @panic("OOM");
+
+    if (vulkan) {
+        c_glfw.c_macros.append("GLFW_INCLUDE_VULKAN") catch @panic("OOM");
+    }
+
+    const c_internal = b.addTranslateC(.{
+        .target = target,
+        .optimize = optimize,
+        .link_libc = true,
+        .root_source_file = b.path("src/c/glfw_internal.h"),
+    });
+    const c_internal_mod = c_internal.createModule();
+
+    c_internal.include_dirs.append(.{
+        .path = glfw.path("src"),
+    }) catch @panic("OOM");
+
     // Add module
     const mod = b.addModule("zlfw", .{
         .root_source_file = b.path("src/module.zig"),
@@ -26,6 +54,8 @@ pub fn build(b: *std.Build) void {
         .optimize = optimize,
     });
     mod.linkLibrary(glfw.artifact("glfw"));
+    mod.addImport("c_glfw", c_glfw_mod);
+    mod.addImport("c_internal", c_internal_mod);
     mod.addOptions("glfw_options", options);
 
     // Tests
