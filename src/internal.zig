@@ -2,7 +2,7 @@
 const std = @import("std");
 const builtin = @import("builtin");
 pub const c = @import("c_glfw");
-pub const _c = @import("c_internal");
+pub const _c = c;
 pub const glfw = @import("module.zig");
 pub const err = @import("error.zig");
 pub const Error = err.Error;
